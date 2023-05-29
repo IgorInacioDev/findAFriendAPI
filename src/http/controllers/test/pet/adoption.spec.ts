@@ -1,6 +1,7 @@
 import { app } from '@/app'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { createPetTestE2E } from '../functions/create-pet-and-org'
 
 describe('Pet Test e2e', () => {
   beforeAll(async () => {
@@ -11,19 +12,23 @@ describe('Pet Test e2e', () => {
     await app.close()
   })
 
-  it('É possivel fazer login e receber um token de authenticação?', async () => {
-    const response = await request(app.server).post('/org/register').send({
-      address: 'Estrada do Java, 720',
-      city: 'Rio de Janeiro',
-      email: 'test@gmail.com',
-      name: 'Java Pet',
-      number: 2198075124,
-      password: '123456',
-      zip_code: 22548741,
-    })
+  it('pet adoptione', async () => {
+    const { token, pet } = await createPetTestE2E(app)
+
+    const response = await request(app.server)
+      .post('/pet/adoption')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        petId: pet.id,
+      })
 
     console.log(response.body)
 
     expect(response.statusCode).toEqual(201)
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        contact: expect.any(String),
+      }),
+    )
   })
 })

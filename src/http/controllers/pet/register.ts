@@ -27,5 +27,5 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     org_id: request.user.sub,
   })
 
-  return reply.status(201).send(pet)
+  return reply.status(201).send({ pet })
 }

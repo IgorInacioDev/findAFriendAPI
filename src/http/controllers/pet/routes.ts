@@ -9,7 +9,7 @@ import { adoption } from './adoption'
 export async function petRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWS)
 
-  app.post('/pet', { onRequest: [roleVerify('ORG')] }, register)
+  app.post('/pet/register', register)
   app.get('/pet/profile', { onRequest: [roleVerify('ORG')] }, profile)
   app.get('/pet/fearture', { onRequest: [roleVerify('ORG')] }, filter)
   app.post('/pet/adoption', { onRequest: [roleVerify('ORG')] }, adoption)

@@ -1,7 +1,7 @@
 import { app } from '@/app'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { createPetTestE2E } from '../functions/create-pet-and-org'
+import { createOrgTestE2E } from '../functions/create-pet-and-org'
 
 describe('Pet Test e2e', () => {
   beforeAll(async () => {
@@ -12,13 +12,23 @@ describe('Pet Test e2e', () => {
     await app.close()
   })
 
-  it('pet get profile', async () => {
-    const { pet, token } = await createPetTestE2E(app)
+  it('pet register', async () => {
+    const { token } = await createOrgTestE2E(app)
+    // console.log(token, '1 console')
 
     const response = await request(app.server)
-      .get('/pet/profile')
+      .post('/pet/register')
       .set('Authorization', `Bearer ${token}`)
-      .set('id', `${pet.id}`)
+      .send({
+        age: 'CUB',
+        city: 'Rio de Janeiro',
+        description: '',
+        habitat: 'LITTLE',
+        independence: 'AVERAGE',
+        name: 'toby',
+      })
+
+    console.log(response.body)
 
     expect(response.statusCode).toEqual(201)
     expect(response.body.pet).toEqual(

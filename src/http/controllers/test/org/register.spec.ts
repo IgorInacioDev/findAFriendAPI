@@ -22,7 +22,7 @@ describe('Org Test e2e', () => {
       zip_code: 22548741,
     })
 
-    console.log(response.body)
+    // console.log(response.body)
 
     expect(response.statusCode).toEqual(201)
   })
